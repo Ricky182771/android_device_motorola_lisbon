@@ -119,3 +119,7 @@ TW_EXCLUDE_BASH := true
 
 # Touch (Ilitek) - módulos precompilados de vendor en el ramdisk
 TW_LOAD_VENDOR_MODULES := "sensors_class.ko mtk_tpd_mmi.ko ilitek_mtk_mmi.ko"
+
+# MTP: el gadget no expone función MTP; sin esto, sys.usb.config=mtp,adb
+# falla y tampoco engancha ADB. Se reactiva junto con el descifrado.
+TW_EXCLUDE_MTP := true
