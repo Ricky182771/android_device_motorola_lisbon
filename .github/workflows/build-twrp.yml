@@ -18,6 +18,16 @@ jobs:
           docker-images: true
           swap-storage: false
 
+      - name: Agregar swap (evita que el build muera por falta de RAM)
+        run: |
+          sudo swapoff -a || true
+          sudo rm -f /swapfile /mnt/swapfile
+          sudo fallocate -l 16G /swapfile
+          sudo chmod 600 /swapfile
+          sudo mkswap /swapfile
+          sudo swapon /swapfile
+          free -h && df -h /
+
       - name: Checkout del device tree
         uses: actions/checkout@v4
         with:
@@ -29,7 +39,7 @@ jobs:
           sudo apt-get install -y git-core gnupg flex bison build-essential zip curl \
             zlib1g-dev libc6-dev-i386 x11proto-core-dev libx11-dev lib32z1-dev \
             libgl1-mesa-dev libxml2-utils xsltproc unzip fontconfig python3 \
-            python-is-python3 bc cpio rsync libssl-dev
+            python-is-python3 bc cpio rsync libssl-dev ccache
           mkdir -p ~/bin
           curl -s https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
           chmod +x ~/bin/repo
@@ -49,13 +59,49 @@ jobs:
           rsync -a --exclude .git --exclude .github \
             "$GITHUB_WORKSPACE/device-tree/" "$GITHUB_WORKSPACE/twrp/device/motorola/lisbon/"
 
+      - name: Restaurar ccache
+        uses: actions/cache@v4
+        with:
+          path: ${{ github.workspace }}/ccache
+          key: ccache-twrp12.1-lisbon-${{ github.run_id }}
+          restore-keys: |
+            ccache-twrp12.1-lisbon-
+
       - name: Compilar (recovery-as-boot -> boot.img)
         run: |
           cd "$GITHUB_WORKSPACE/twrp"
           export ALLOW_MISSING_DEPENDENCIES=true
+          export USE_CCACHE=1
+          export CCACHE_EXEC=/usr/bin/ccache
+          export CCACHE_DIR="$GITHUB_WORKSPACE/ccache"
+          export CCACHE_COMPRESS=1
+          ccache -M 8G
+          ccache -z
           source build/envsetup.sh
           lunch twrp_lisbon-eng
-          mka bootimage -j"$(nproc)"
+          # Uso de recursos cada 60 s, para ver si se acaba la RAM o el disco
+          ( while true; do echo "== $(date +%T) $(free -h | awk '/Mem/{print "RAM usada: "$3"/"$2}') | $(free -h | awk '/Swap/{print "swap: "$3}') | $(df -h / | awk 'NR==2{print "disco libre: "$4}')"; sleep 60; done ) &
+          mka bootimage -j3
+          echo "===== estadísticas de ccache ====="
+          ccache -s
+
+      - name: Diagnóstico si falla
+        if: failure()
+        run: |
+          echo "===== RAM / disco ====="; free -h; df -h /
+          echo "===== dmesg (OOM killer) ====="; sudo dmesg | grep -iE "killed process|out of memory|oom" | tail -20 || true
+          echo "===== out/error.log ====="; tail -n 80 "$GITHUB_WORKSPACE/twrp/out/error.log" 2>/dev/null || echo "(no existe)"
+
+      - name: Subir logs del build si falla
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            ${{ github.workspace }}/twrp/out/error.log
+            ${{ github.workspace }}/twrp/out/soong.log
+            ${{ github.workspace }}/twrp/out/verbose.log.gz
+          if-no-files-found: ignore
 
       - name: Subir boot.img con TWRP
         uses: actions/upload-artifact@v4
