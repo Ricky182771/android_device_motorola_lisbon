@@ -62,7 +62,7 @@ jobs:
       - name: Restaurar ccache
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/ccache
+          path: ${{ github.workspace }}/twrp/.ccache
           key: ccache-twrp12.1-lisbon-${{ github.run_id }}
           restore-keys: |
             ccache-twrp12.1-lisbon-
@@ -73,7 +73,7 @@ jobs:
           export ALLOW_MISSING_DEPENDENCIES=true
           export USE_CCACHE=1
           export CCACHE_EXEC=/usr/bin/ccache
-          export CCACHE_DIR="$GITHUB_WORKSPACE/ccache"
+          export CCACHE_DIR="$GITHUB_WORKSPACE/twrp/.ccache"   # dentro del source: el sandbox de Soong deja el resto en solo lectura
           export CCACHE_COMPRESS=1
           ccache -M 8G
           ccache -z
