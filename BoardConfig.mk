@@ -116,3 +116,6 @@ TW_EXCLUDE_TWRPAPP := true
 TW_EXCLUDE_PYTHON := true
 TW_EXCLUDE_NANO := true
 TW_EXCLUDE_BASH := true
+
+# Touch (Ilitek) - módulos precompilados de vendor en el ramdisk
+TW_LOAD_VENDOR_MODULES := "sensors_class.ko mtk_tpd_mmi.ko ilitek_mtk_mmi.ko"

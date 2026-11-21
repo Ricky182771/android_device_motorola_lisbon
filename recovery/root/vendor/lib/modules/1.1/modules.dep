@@ -1,0 +1,3 @@
+ilitek_mtk_mmi.ko: sensors_class.ko mtk_tpd_mmi.ko
+sensors_class.ko:
+mtk_tpd_mmi.ko:
