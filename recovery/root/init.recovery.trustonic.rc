@@ -5,7 +5,18 @@
 # mcDriverDaemon va SIN --sfs-reformat: en recovery nunca debe formatear el
 # almacenamiento seguro del TEE (ahí viven las llaves del keymaster de Android).
 
+on fs
+    # Crea el keyring "fscrypt" en la sesión de init. Sin él, vold instala la
+    # llave DE en el kernel pero falla al guardarla en el keyring ("Unable to
+    # find device keyring") y TWRP no puede descifrar al usuario 0.
+    install_keyring
+    setprop crypto.ready 1
+
 on init
+    # manifiesto VINTF de framework (keystore2); ver preparar-descifrado.py
+    mkdir /system/etc/vintf 0755 root root
+    copy /system/etc/vintf-framework.xml /system/etc/vintf/manifest.xml
+    chmod 0644 /system/etc/vintf/manifest.xml
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw:/system/lib64/hw
     mkdir /mnt/vendor/persist 0771 system system
     mkdir /mnt/vendor/tzapp 0771 system system
