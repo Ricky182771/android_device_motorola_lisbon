@@ -139,3 +139,8 @@ TW_EXCLUDE_TZDATA := true
 TW_EXCLUDE_LPDUMP := true
 TW_NO_EXFAT := true
 TW_NO_EXFAT_FUSE := true
+
+# Con TW_INCLUDE_CRYPTO, recovery se enlaza contra libresetprop.so; resetprop
+# (recovery: true) es lo que la instala en el ramdisk.
+TW_INCLUDE_RESETPROP := true
+TW_INCLUDE_LIBRESETPROP := true
