@@ -124,6 +124,12 @@ TW_LOAD_VENDOR_MODULES := "sensors_class.ko mtk_tpd_mmi.ko ilitek_mtk_mmi.ko"
 # falla y tampoco engancha ADB. Se reactiva junto con el descifrado.
 TW_EXCLUDE_MTP := true
 
-# MTP: el gadget no expone función MTP; sin esto, sys.usb.config=mtp,adb
-# falla y tampoco engancha ADB. Se reactiva junto con el descifrado.
-TW_EXCLUDE_MTP := true
+# ---------------------------------------------------------------------------
+# Descifrado: FBE v2 + metadata (keydirectory=/metadata/vold/metadata_encryption)
+# TEE Trustonic/Kinibi; blobs en recovery/root/vendor (preparar-descifrado.py)
+# ---------------------------------------------------------------------------
+TW_INCLUDE_CRYPTO := true
+TW_INCLUDE_CRYPTO_FBE := true
+TW_INCLUDE_FBE_METADATA_DECRYPT := true
+BOARD_USES_METADATA_PARTITION := true
+TW_USE_FSCRYPT_POLICY := 2

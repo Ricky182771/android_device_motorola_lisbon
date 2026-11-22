@@ -1,0 +1,93 @@
+# Generado por preparar-descifrado.py
+# Servicios del TEE Trustonic + keymaster/gatekeeper + boot control de MTK.
+# Copiados del vendor stock; cambios: seclabel recovery, user root y 'disabled'
+# (se arrancan abajo cuando hwservicemanager está listo).
+
+on init
+    export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw:/system/lib64/hw
+    mkdir /mnt/vendor/persist 0771 system system
+    setprop ro.hardware.gatekeeper trustonic
+    setprop ro.hardware.kmsetkey trustonic
+
+on post-fs
+    # mcDriverDaemon guarda su SFS en /mnt/vendor/persist/mcRegistry
+    mount ext4 /dev/block/platform/bootdevice/by-name/persist /mnt/vendor/persist nosuid nodev noatime
+    chown system system /mnt/vendor/persist
+    chmod 0771 /mnt/vendor/persist
+    mkdir /mnt/vendor/persist/mcRegistry 0771 system system
+
+# Copia los blobs desde la partición vendor real al /vendor del ramdisk
+service copiar-blobs /system/bin/sh /system/bin/copiar-blobs-vendor.sh
+    user root
+    group root
+    oneshot
+    disabled
+    seclabel u:r:recovery:s0
+
+on property:twrp.super.symlinks_created=true
+    start copiar-blobs
+
+on property:twrp.modules.loaded=true
+    start copiar-blobs
+
+service vendor.boot-hal-1-2 /vendor/bin/hw/android.hardware.boot@1.2-service
+    interface android.hardware.boot@1.0::IBootControl default
+    interface android.hardware.boot@1.1::IBootControl default
+    interface android.hardware.boot@1.2::IBootControl default
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/persist/mcRegistry \
+    -r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/05120000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/05120000000000000000000000000001.drbin \
+    -r /vendor/app/mcRegistry/020b0000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/030c0000000000000000000000000000.drbin \
+    -r /vendor/app/mcRegistry/40188311faf343488db888ad39496f9a.drbin \
+    -r /vendor/app/mcRegistry/07060000000000000000000000007169.drbin \
+    -r /vendor/app/mcRegistry/08070000000000000000000000008270.drbin \
+    -r /vendor/app/mcRegistry/9073f03a9618383bb1856eb3f990babd.drbin \
+    -r /vendor/app/mcRegistry/5020170115e016302017012521300000.drbin
+    user root
+    group root
+    priority -20
+    disabled
+    seclabel u:r:recovery:s0
+
+service vendor.keymaster-4-1-trustonic /vendor/bin/hw/android.hardware.keymaster@4.1-service.trustonic
+    user root
+    group root drmrpc
+    disabled
+    seclabel u:r:recovery:s0
+
+service vendor.gatekeeper-1-0 /vendor/bin/hw/android.hardware.gatekeeper@1.0-service
+    interface android.hardware.gatekeeper@1.0::IGatekeeper default
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service keymaster_attestation-1-1 /vendor/bin/hw/vendor.mediatek.hardware.keymaster_attestation@1.1-service
+    interface vendor.mediatek.hardware.keymaster_attestation@1.0::IKeymasterDevice default
+    interface vendor.mediatek.hardware.keymaster_attestation@1.1::IKeymasterDevice default
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+# Arrancan cuando ya están los blobs y hwservicemanager (el que llegue al último)
+on property:vendor.blobs.ready=1 && property:hwservicemanager.ready=true
+    start vendor.boot-hal-1-2
+    start mobicore
+    start keymaster_attestation-1-1
+    start vendor.gatekeeper-1-0
+    start vendor.keymaster-4-1-trustonic
+
+on property:twrp.decrypt.done=true
+    stop vendor.keymaster-4-1-trustonic
+    stop vendor.gatekeeper-1-0
+    stop keymaster_attestation-1-1
+    stop mobicore
