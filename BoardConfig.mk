@@ -93,15 +93,14 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_USE_F2FS := true
 
 # Security patch level
-VENDOR_SECURITY_PATCH := 2021-08-01
 
 # Verified Boot
 BOARD_AVB_ENABLE := true
 BOARD_AVB_MAKE_VBMETA_IMAGE_ARGS += --flags 3
 
 # Hack: prevent anti rollback
-PLATFORM_SECURITY_PATCH := 2099-12-31
-VENDOR_SECURITY_PATCH := 2099-12-31
+PLATFORM_SECURITY_PATCH := 2023-08-01
+VENDOR_SECURITY_PATCH := 2023-08-01
 PLATFORM_VERSION := 16.1.0
 
 # TWRP Configuration
@@ -148,3 +147,4 @@ TW_INCLUDE_LIBRESETPROP := true
 # logd + logcat en el recovery, para depurar keystore2/vold
 TWRP_INCLUDE_LOGCAT := true
 TARGET_USES_LOGD := true
+TW_NO_FASTBOOT_BOOT := true
