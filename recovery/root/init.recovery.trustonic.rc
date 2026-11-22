@@ -8,6 +8,13 @@
 on init
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw:/system/lib64/hw
     mkdir /mnt/vendor/persist 0771 system system
+    mkdir /mnt/vendor/tzapp 0771 system system
+    # mcDriverDaemon usa /data/vendor/mcRegistry como ruta de registro y su
+    # RegistryServer espera a que exista. En Android la crea tee.rc cuando
+    # ro.crypto.state=encrypted; aquí /data aún no está montado, así que se crea
+    # en el ramdisk (queda oculta cuando TWRP monte /data).
+    mkdir /data/vendor 0771 system system
+    mkdir /data/vendor/mcRegistry 0775 system system
     setprop ro.hardware.gatekeeper trustonic
     setprop ro.hardware.kmsetkey trustonic
 
@@ -17,6 +24,8 @@ on post-fs
     chown system system /mnt/vendor/persist
     chmod 0771 /mnt/vendor/persist
     mkdir /mnt/vendor/persist/mcRegistry 0771 system system
+    # Otra ruta de registro del daemon (TAs del equipo), solo lectura
+    mount ext4 /dev/block/platform/bootdevice/by-name/tzapp${ro.boot.slot_suffix} /mnt/vendor/tzapp ro nosuid nodev noatime
 
 # Copia los blobs desde la partición vendor real al /vendor del ramdisk
 service copiar-blobs /system/bin/sh /system/bin/copiar-blobs-vendor.sh
