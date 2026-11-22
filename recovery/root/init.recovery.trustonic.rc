@@ -2,6 +2,8 @@
 # Servicios del TEE Trustonic + keymaster/gatekeeper + boot control de MTK.
 # Copiados del vendor stock; cambios: seclabel recovery, user root y 'disabled'
 # (se arrancan abajo cuando hwservicemanager está listo).
+# mcDriverDaemon va SIN --sfs-reformat: en recovery nunca debe formatear el
+# almacenamiento seguro del TEE (ahí viven las llaves del keymaster de Android).
 
 on init
     export LD_LIBRARY_PATH /system/lib64:/vendor/lib64:/vendor/lib64/hw:/system/lib64/hw
@@ -39,7 +41,7 @@ service vendor.boot-hal-1-2 /vendor/bin/hw/android.hardware.boot@1.2-service
     disabled
     seclabel u:r:recovery:s0
 
-service mobicore /vendor/bin/mcDriverDaemon --sfs-reformat --P1 /mnt/vendor/persist/mcRegistry \
+service mobicore /vendor/bin/mcDriverDaemon --P1 /mnt/vendor/persist/mcRegistry \
     -r /vendor/app/mcRegistry/06090000000000000000000000000000.drbin \
     -r /vendor/app/mcRegistry/020f0000000000000000000000000000.drbin \
     -r /vendor/app/mcRegistry/05120000000000000000000000000000.drbin \
