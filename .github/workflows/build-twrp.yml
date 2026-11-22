@@ -85,6 +85,15 @@ jobs:
           echo "===== estadísticas de ccache ====="
           ccache -s
 
+      - name: Tamaño del ramdisk (los 40 archivos más grandes)
+        if: always()
+        run: |
+          cd "$GITHUB_WORKSPACE/twrp/out/target/product/lisbon" 2>/dev/null || exit 0
+          ls -l kernel ramdisk-recovery.img boot.img 2>/dev/null || true
+          du -sh recovery/root 2>/dev/null || true
+          find recovery/root -type f -printf '%s\t%p\n' 2>/dev/null | sort -rn | head -40 \
+            | awk -F'\t' '{printf "%8.0f KB  %s\n", $1/1024, $2}'
+
       - name: Diagnóstico si falla
         if: failure()
         run: |

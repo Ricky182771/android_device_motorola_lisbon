@@ -109,7 +109,7 @@ TW_THEME := portrait_hdpi
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_USE_TOOLBOX := true
-TW_INCLUDE_REPACKTOOLS := true
+TW_INCLUDE_REPACKTOOLS := false
 
 # Reducir tamaño: boot es de 32 MB y el ramdisk solo puede ir en gzip
 TW_EXCLUDE_TWRPAPP := true
@@ -133,3 +133,9 @@ TW_INCLUDE_CRYPTO_FBE := true
 TW_INCLUDE_FBE_METADATA_DECRYPT := true
 BOARD_USES_METADATA_PARTITION := true
 TW_USE_FSCRYPT_POLICY := 2
+
+# Más recortes de tamaño (boot de 32 MB, ramdisk solo en gzip)
+TW_EXCLUDE_TZDATA := true
+TW_EXCLUDE_LPDUMP := true
+TW_NO_EXFAT := true
+TW_NO_EXFAT_FUSE := true
