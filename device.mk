@@ -19,4 +19,3 @@ PRODUCT_PACKAGES += \
     cppreopts.sh \
     update_engine \
     update_verifier \
-    update_engine_sideload

@@ -44,7 +44,7 @@ TARGET_BOOTLOADER_BOARD_NAME := lisbon
 TARGET_NO_BOOTLOADER := true
 
 # Display
-TARGET_SCREEN_DENSITY := 400
+TARGET_SCREEN_DENSITY := 160
 
 # Kernel
 BOARD_BOOTIMG_HEADER_VERSION := 2
@@ -109,7 +109,7 @@ TW_THEME := portrait_hdpi
 TW_SCREEN_BLANK_ON_BOOT := true
 TW_INPUT_BLACKLIST := "hbtp_vm"
 TW_USE_TOOLBOX := true
-TW_INCLUDE_REPACKTOOLS := false
+TW_INCLUDE_REPACKTOOLS := true
 
 # Reducir tamaño: boot es de 32 MB y el ramdisk solo puede ir en gzip
 TW_EXCLUDE_TWRPAPP := true
