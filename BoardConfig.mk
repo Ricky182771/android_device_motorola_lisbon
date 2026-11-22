@@ -144,3 +144,7 @@ TW_NO_EXFAT_FUSE := true
 # (recovery: true) es lo que la instala en el ramdisk.
 TW_INCLUDE_RESETPROP := true
 TW_INCLUDE_LIBRESETPROP := true
+
+# logd + logcat en el recovery, para depurar keystore2/vold
+TWRP_INCLUDE_LOGCAT := true
+TARGET_USES_LOGD := true
