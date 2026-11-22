@@ -23,16 +23,28 @@ while [ ! -e "$DEV" ] && [ $i -lt 20 ]; do sleep 0.5; i=$((i+1)); done
 mkdir -p $MNT $ROOT
 mount -o bind / $ROOT || { log "no pude hacer bind de /"; exit 1; }
 mount -t ext4 -o ro "$DEV" $MNT || { log "no pude montar $DEV"; umount $ROOT; exit 1; }
-n=0; fail=0
-while IFS= read -r rel; do
-    case "$rel" in ''|'#'*) continue ;; esac
-    dst="$ROOT/vendor/$rel"
+copy_one() {
+    dst="$ROOT/vendor/$1"
     mkdir -p "${dst%/*}"
     # cp -a puede devolver error al preservar atributos aunque sí copie;
     # lo que cuenta es que el archivo (o symlink) quede en su lugar
-    cp -a "$MNT/$rel" "$dst" 2>/dev/null || cp -L "$MNT/$rel" "$dst" 2>/dev/null
-    if [ -e "$dst" ] || [ -L "$dst" ]; then n=$((n+1)); else fail=$((fail+1)); log "falló $rel"; fi
-done < $LIST
+    cp -a "$MNT/$1" "$dst" 2>/dev/null || cp -L "$MNT/$1" "$dst" 2>/dev/null
+    [ -e "$dst" ] || [ -L "$dst" ]
+}
+PEND=/tmp/vendor_blobs_pend
+grep -v -e '^#' -e '^$' $LIST > $PEND
+# Hasta 5 pasadas: los primeros segundos del arranque a veces falla algún cp
+for pass in 1 2 3 4 5; do
+    : > $PEND.next
+    while IFS= read -r rel; do
+        copy_one "$rel" || echo "$rel" >> $PEND.next
+    done < $PEND
+    mv $PEND.next $PEND
+    [ -s $PEND ] || break
+    sleep 1
+done
+fail=$(wc -l < $PEND); n=$(( $(grep -vc -e '^#' -e '^$' $LIST) - fail ))
+while IFS= read -r rel; do log "falló $rel"; done < $PEND
 umount $MNT
 
 # Los fallos se registran pero no bloquean: basta con que estén los ejecutables
