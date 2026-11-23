@@ -100,12 +100,14 @@ TARGET_USERIMAGES_USE_F2FS := true
 # La genera tools/preparar-prebuilts.sh a partir del firmware stock.
 BOARD_PREBUILT_VENDORIMAGE := $(DEVICE_PATH)/prebuilts/vendor.img
 
-# Particiones dinámicas
-# TODO: llenar con la salida de tools/leer-super.sh (lpdump del super stock).
+# Particiones dinámicas (lpdump del super stock): A/B normal, NO virtual A/B.
+# Grupo "main" con máximo de 5 702 156 288 bytes por slot (super/2 - 2 MiB).
+# Stock ocupa 5 342 MiB en main_a: system 972 + system_ext 758 + product 2 988
+# + vendor 625. Lo que sale de este build tiene que caber en 5 438 MiB.
 BOARD_SUPER_PARTITION_SIZE := 11408506880
-BOARD_SUPER_PARTITION_GROUPS := motorola_dynamic_partitions
-BOARD_MOTOROLA_DYNAMIC_PARTITIONS_PARTITION_LIST := system system_ext product vendor
-BOARD_MOTOROLA_DYNAMIC_PARTITIONS_SIZE := 11404312576 # TODO: tamaño máximo real del grupo según lpdump
+BOARD_SUPER_PARTITION_GROUPS := main
+BOARD_MAIN_PARTITION_LIST := system system_ext product vendor
+BOARD_MAIN_SIZE := 5702156288
 
 # ---------------------------------------------------------------------------
 # Propiedades

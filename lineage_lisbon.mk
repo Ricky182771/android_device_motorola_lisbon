@@ -22,11 +22,8 @@ PRODUCT_MANUFACTURER := motorola
 
 PRODUCT_GMS_CLIENTID_BASE := android-motorola
 
-# TODO: copiar los valores exactos del stock:
-#   adb shell getprop ro.vendor.build.fingerprint
-#   adb shell getprop ro.build.description   (o ro.vendor.build.description)
-#   adb shell getprop ro.product.vendor.name
+# Valores del stock S3RLS32.114-25-13 (getprop)
 PRODUCT_BUILD_PROP_OVERRIDES += \
-    DeviceProduct=lisbon_reteu
-#   BuildDesc="lisbon_reteu-user 12 S3RLS32.114-25-13 <hash> release-keys"
-#   BuildFingerprint=motorola/lisbon_reteu/lisbon:12/S3RLS32.114-25-13/<hash>:user/release-keys
+    BuildDesc="lisbon_retail-user 12 S3RLS32.114-25-13 cdb96c release-keys" \
+    BuildFingerprint=motorola/lisbon_retail/lisbon:12/S3RLS32.114-25-13/cdb96c:user/release-keys \
+    DeviceProduct=lisbon_retail

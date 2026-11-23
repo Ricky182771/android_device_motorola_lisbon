@@ -44,8 +44,8 @@ for m in re.finditer(r'Name:\s*(\S+)\s*\n\s*Group:\s*(\S+)\s*\n\s*Attributes:\s*
 print("""
 Qué pegar en BoardConfig.mk:
   - BOARD_SUPER_PARTITION_SIZE: el de arriba.
-  - BOARD_MOTOROLA_DYNAMIC_PARTITIONS_SIZE: el 'Maximum size' del grupo
-    motorola_dynamic_partitions_a (sin sufijo en el BoardConfig).
+  - BOARD_SUPER_PARTITION_GROUPS: el nombre del grupo sin _a/_b (en lisbon: main).
+  - BOARD_<GRUPO>_SIZE: el 'Maximum size' de <grupo>_a.
     Si sale 0 o no hay máximo: SUPER - 4 MiB en virtual A/B, o
     SUPER/2 - 4 MiB en A/B normal.
 """)

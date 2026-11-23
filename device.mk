@@ -8,8 +8,7 @@ LOCAL_PATH := device/motorola/lisbon
 # ---------------------------------------------------------------------------
 # API levels
 # ---------------------------------------------------------------------------
-# lisbon salió con Android 11. TODO: confirmar con
-#   adb shell getprop ro.product.first_api_level
+# lisbon salió con Android 11 (ro.product.first_api_level=30).
 PRODUCT_SHIPPING_API_LEVEL := 30
 
 # Vendor stock de Android 12 => necesita la APEX de VNDK v31

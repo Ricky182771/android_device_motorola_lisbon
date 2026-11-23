@@ -1,3 +1,3 @@
 # Moto G60s (lisbon) — props de system
-# Densidad real del panel stock. TODO: confirmar con `adb shell getprop ro.sf.lcd_density`
+# Densidad del panel stock (getprop ro.sf.lcd_density)
 ro.sf.lcd_density=400

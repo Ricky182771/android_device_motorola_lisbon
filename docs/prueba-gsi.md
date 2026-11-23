@@ -26,7 +26,7 @@ tools/leer-super.sh ~/lisbon/fw/super.raw | tee ~/lisbon/lpdump-resumen.txt
 grep -oE 'filename="[^"]+"|partition="[^"]+"' ~/lisbon/fw/flashfile.xml | sort -u
 ```
 
-Con esto se llenan los TODO del tree (fingerprint, first_api_level, tamaños del super).
+Con esto se llenaron los valores del tree (fingerprint, first_api_level, super y grupo `main`).
 
 ## 1. Preparar la imagen
 
@@ -51,6 +51,7 @@ fastboot flash boot_a ~/lisbon/fw/boot.img
 
 ```bash
 fastboot --disable-verity --disable-verification flash vbmeta_a ~/lisbon/fw/vbmeta.img
+fastboot erase metadata      # mismo nombre que usa el flashfile stock de Moto
 ```
 
 ## 4. Flashear la GSI (fastbootd)
@@ -58,9 +59,8 @@ fastboot --disable-verity --disable-verification flash vbmeta_a ~/lisbon/fw/vbme
 ```bash
 fastboot reboot fastboot
 fastboot getvar is-userspace          # debe decir yes
-fastboot delete-logical-partition product_a   # libera espacio; se restaura con el flashfile
+fastboot delete-logical-partition product_a   # libera 2 988 MiB de main_a (hoy quedan ~96 MiB libres)
 fastboot flash system_a ~/lisbon/gsi/<nombre>.img
-fastboot erase md_udc                 # en lisbon /metadata es la partición md_udc
 fastboot -w
 fastboot reboot
 ```

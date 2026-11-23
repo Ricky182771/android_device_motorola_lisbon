@@ -15,8 +15,6 @@ Rama `lineage-22.2`. El TWRP sigue en la rama `main`.
 Esqueleto inicial: aún no se ha compilado. Primero va la [prueba de GSI](docs/prueba-gsi.md).
 
 Pendiente (TODO en los .mk):
-- Tamaños reales del super y del grupo → `tools/leer-super.sh`.
-- Fingerprint/descripción stock, `first_api_level` y densidad → `getprop`.
 - Boot control HAL en el ramdisk de recovery (sideload A/B).
 - Overlays (esquinas, recortes, brillo), sepolicy propia y salir de permissive.
 
@@ -37,12 +35,12 @@ adb reboot bootloader
 fastboot flash boot_a boot.img
 fastboot flash vbmeta_a vbmeta.img
 fastboot flash vbmeta_system_a vbmeta_system.img
+fastboot erase metadata
 fastboot reboot fastboot
 fastboot flash system_a system.img
 fastboot flash system_ext_a system_ext.img
 fastboot flash product_a product.img
 fastboot flash vendor_a vendor.img
-fastboot erase md_udc                 # en lisbon /metadata es la partición md_udc
 fastboot -w
 fastboot reboot
 ```
