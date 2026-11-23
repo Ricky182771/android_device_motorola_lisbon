@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-FileCopyrightText: The LineageOS Project
+    SPDX-License-Identifier: Apache-2.0
+-->
+<!-- Valores del product stock (MotoFrameworkResOverlayCommon y
+     framework-res__auto_generated_rro_product, S3RLS32.114-25-13).
+     Lo de pantalla y brillo vive en vendor/overlay y se conserva solo. -->
+<resources>
+    <!-- Pantalla / doze -->
+    <bool name="config_automatic_brightness_available">true</bool>
+    <integer name="config_screenBrightnessDoze">17</integer>
+    <bool name="config_dozeAfterScreenOffByDefault">true</bool>
+    <bool name="config_displayBlanksAfterDoze">true</bool>
+    <bool name="config_powerDecoupleInteractiveModeFromDisplay">true</bool>
+    <bool name="config_setColorTransformAccelerated">true</bool>
+    <bool name="config_suspendWhenScreenOffDueToProximity">true</bool>
+    <bool name="config_unplugTurnsOnScreen">true</bool>
+
+    <!-- Audio / entrada -->
+    <bool name="config_useDevInputEventForAudioJack">true</bool>
+    <bool name="config_supportsMicToggle">true</bool>
+
+    <!-- Telefonía -->
+    <bool name="config_hotswapCapable">true</bool>
+
+    <!-- Bluetooth -->
+    <integer name="config_bluetooth_operating_voltage_mv">3300</integer>
+</resources>

@@ -16,7 +16,21 @@ Esqueleto inicial: aún no se ha compilado. Primero va la [prueba de GSI](docs/p
 
 Pendiente (TODO en los .mk):
 - Boot control HAL en el ramdisk de recovery (sideload A/B).
-- Overlays (esquinas, recortes, brillo), sepolicy propia y salir de permissive.
+- Sepolicy propia y salir de permissive.
+- Wi-Fi: el driver no escanea canales DFS de 5 GHz (52–144) fuera del framework stock; en stock sí. Probado con la GSI: el canal 100 no se ve y el 149 sí.
+
+## Overlays
+
+`rro_overlays/` reemplaza lo que el stock tenía en `product/overlay` (lo de
+`vendor/overlay` se conserva con el vendor prebuilt):
+
+| Overlay | Origen stock | Para qué |
+|---|---|---|
+| FrameworkResLisbon | MotoFrameworkResOverlayCommon, framework-res__auto_generated_rro_product | doze, brillo automático, proximidad, jack, hotswap de SIM |
+| WifiResLisbon | WifiResCommonOverlayAOSP | 5 GHz, SAE, FT, aleatorización de MAC, SoftAP (ACS, 11ac, canales 36-161) |
+| TetheringResLisbon | framework-res__auto_generated_rro_product | `ap\d`: el hotspot de MTK usa `ap0` |
+| SystemUIResLisbon | SystemUI__auto_generated_rro_product | doze_display_state_supported |
+| SettingsProviderResLisbon | SettingsProvider__auto_generated_rro_product | brillo automático por defecto |
 
 ## Compilar (VM Ubuntu 24.04)
 

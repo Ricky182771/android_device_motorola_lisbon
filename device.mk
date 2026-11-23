@@ -60,6 +60,17 @@ PRODUCT_COPY_FILES += \
 PRODUCT_OTA_ENFORCE_VINTF_KERNEL_REQUIREMENTS := false
 
 # ---------------------------------------------------------------------------
+# Overlays (reemplazan los de product/overlay del stock; los de
+# vendor/overlay se conservan con el vendor prebuilt)
+# ---------------------------------------------------------------------------
+PRODUCT_PACKAGES += \
+    FrameworkResLisbon \
+    SettingsProviderResLisbon \
+    SystemUIResLisbon \
+    TetheringResLisbon \
+    WifiResLisbon
+
+# ---------------------------------------------------------------------------
 # Pantalla
 # ---------------------------------------------------------------------------
 # 1080x2460

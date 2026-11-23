@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    SPDX-FileCopyrightText: The LineageOS Project
+    SPDX-License-Identifier: Apache-2.0
+-->
+<!-- Valores de WifiResCommonOverlayAOSP (product stock). -->
+<resources>
+    <bool name="config_wifi5ghzSupport">true</bool>
+    <bool name="config_wifiSaeH2eSupported">true</bool>
+    <bool name="config_wifiSoftapPassphraseAsciiEncodableCheck">false</bool>
+    <bool name="config_wifi_background_scan_support">true</bool>
+    <bool name="config_wifi_connected_mac_randomization_supported">true</bool>
+    <bool name="config_wifi_fast_bss_transition_enabled">true</bool>
+    <bool name="config_wifi_p2p_mac_randomization_supported">true</bool>
+    <bool name="config_wifi_revert_country_code_on_cellular_loss">true</bool>
+    <bool name="config_wifi_softap_acs_supported">true</bool>
+    <bool name="config_wifi_softap_ieee80211ac_supported">true</bool>
+    <bool name="config_wifi_softap_sae_supported">true</bool>
+    <bool name="config_wifiFrameworkMaxNumSpatialStreamDeviceOverrideEnable">false</bool>
+
+    <integer name="config_wifiHardwareSoftapMaxClientCount">10</integer>
+    <integer name="config_wifiDelayDisconnectOnImsLostMs">4000</integer>
+
+    <string name="config_wifiSoftap5gChannelList" translatable="false">36-161</string>
+    <string name="config_wifi_tcp_buffers" translatable="false">524288,2097152,4194304,262144,524288,1048576</string>
+    <string name="config_wifiP2pDeviceNamePrefix" translatable="false">moto g60s_</string>
+    <string name="wifi_tether_configure_ssid_default" translatable="false">moto g(60)s</string>
+
+    <integer-array name="config_wifiRssiLevelThresholds">
+        <item>-88</item>
+        <item>-82</item>
+        <item>-75</item>
+        <item>-65</item>
+    </integer-array>
+    <integer-array name="config_wifiDisconnectedScanIntervalScheduleSec">
+        <item>20</item>
+        <item>40</item>
+        <item>80</item>
+        <item>80</item>
+    </integer-array>
+</resources>
